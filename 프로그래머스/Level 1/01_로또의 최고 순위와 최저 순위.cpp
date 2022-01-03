@@ -12,26 +12,28 @@ vector<int> solution(vector<int> lottos, vector<int> win_nums)
     vector<int> answer;
     vector<int> result(2);
     vector<int>::iterator it;
-    vector<int> count(2);
 
-    for (size_t i = 0; i < 6; i++)
-    {
-        if (lottos[i] != 0)
-        {
-            it = find(win_nums.begin(), win_nums.end(), lottos[i]);
-            if (it != win_nums.end())
-                count[1]++; // lottos[i]와 일치하는 값이 있을 경우 Count
+    for (size_t i = 0; i < 2; i++) {
+        for (size_t j = 0; j < 6; j++) {
+            if (i == 0) { // 최고일 때
+                it = find(win_nums.begin(), win_nums.end(), lottos[j]);
+                if (it != win_nums.end() || lottos[j] == 0)
+                    result[i]++;    
+            } else { // 최저일 때
+                it = find(win_nums.begin(), win_nums.end(), lottos[j]);
+                if(it != win_nums.end())
+                    result[i]++;
+            }
         }
-        else
-            count[0]++; // 0이 몇개 있는지 Count
+        if (result[i] != 0)
+            result[i] = (result[i] - 7) * -1;
+        else {
+            if (i == 0)
+                result[i] = 1;
+            else
+                result[i] = 6;
+        }
     }
-
-    result[0] = 7 - (count[0] + count[1]);
-    if (result[0] >= 7)
-        result[0] = 1;
-    result[1] = 7 - count[1];
-    if (result[1] >= 7)
-        result[1] = 6;
 
     return result;
 }
